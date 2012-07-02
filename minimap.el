@@ -37,6 +37,11 @@
 ;;  * Use 'M-x minimap-kill' to kill the minimap.
 ;;  * Use 'M-x customize-group RET minimap RET' to adapt minimap to your needs.
 
+;; Customization:
+;;  Set minimap mode specific variables:
+;;    (add-hook 'minimap-mode-hook
+;;              (lambda () (setq truncate-lines t)))
+
 ;; Download:
 ;;  You can always get the latest version from the git repository:
 ;;       git://randomsample.de/minimap.git
@@ -233,6 +238,11 @@ minimap buffer."
   :type '(repeat symbol)
   :group 'minimap)
 
+(defcustom minimap-mode-hook nil
+  "Hook run when minimap was created."
+  :type 'hook
+  :group 'minimap)
+
 ;;; Internal variables
 
 (defvar minimap-start nil)
@@ -285,6 +295,7 @@ minimap buffer."
 		(run-with-idle-timer minimap-update-delay t 'minimap-update)))
 	(setq minimap-active-minimaps
 	      (1+ minimap-active-minimaps))))
+    (run-hooks 'minimap-mode-hook)
     (other-window 1)
     (minimap-sync-overlays)))
 

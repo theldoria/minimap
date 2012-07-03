@@ -84,31 +84,31 @@ By default, this is only a different background color."
 (defface minimap-semantic-function-face
   '((((background dark))
      (:box (:line-width 1 :color "white")
-	   :inherit (font-lock-function-name-face minimap-font-face)
-	   :height 2.5 :background "gray10"))
+           :inherit (font-lock-function-name-face minimap-font-face)
+           :height 2.5 :background "gray10"))
     (t (:box (:line-width 1 :color "black")
-	     :inherit (font-lock-function-name-face minimap-font-face)
-	     :height 2.5 :background "gray90")))
+             :inherit (font-lock-function-name-face minimap-font-face)
+             :height 2.5 :background "gray90")))
   "Face used for functions in the semantic overlay.")
 
 (defface minimap-semantic-variable-face
   '((((background dark))
      (:box (:line-width 1 :color "white")
-	   :inherit (font-lock-variable-name-face minimap-font-face)
-	    :height 2.5 :background "gray10"))
+           :inherit (font-lock-variable-name-face minimap-font-face)
+           :height 2.5 :background "gray10"))
     (t (:box (:line-width 1 :color "black")
-	     :inherit (font-lock-function-name-face minimap-font-face)
-	     :height 2.5 :background "gray90")))
+             :inherit (font-lock-function-name-face minimap-font-face)
+             :height 2.5 :background "gray90")))
   "Face used for variables in the semantic overlay.")
 
 (defface minimap-semantic-type-face
   '((((background dark))
      (:box (:line-width 1 :color "white")
-	   :inherit (font-lock-type-face minimap-font-face)
-	   :height 2.5 :background "gray10"))
+           :inherit (font-lock-type-face minimap-font-face)
+           :height 2.5 :background "gray10"))
     (t (:box (:line-width 1 :color "black")
-	     :inherit (font-lock-function-name-face minimap-font-face)
-	     :height 2.5 :background "gray90")))
+             :inherit (font-lock-function-name-face minimap-font-face)
+             :height 2.5 :background "gray90")))
   "Face used for types in the semantic overlay.")
 
 (defcustom minimap-width-fraction 0.2
@@ -120,7 +120,7 @@ By default, this is only a different background color."
   "Location of the minimap window.
 Can be either the symbol `left' or `right'."
   :type '(choice (const :tag "Left" left)
-		 (const :tag "Right" right))
+                 (const :tag "Right" right))
   :group 'minimap)
 
 (defcustom minimap-buffer-name-prefix "*MINIMAP* "
@@ -134,13 +134,13 @@ Setting this to 0 will let the minimap react immediately, but
 this will slow down scrolling."
   :type 'number
   :set (lambda (sym value)
-	 (set sym value)
-	 (when (and (boundp 'minimap-timer-object)
-		    minimap-timer-object)
-	   (cancel-timer minimap-timer-object)
-	   (setq minimap-timer-object
-		 (run-with-idle-timer
-		  minimap-update-delay t 'minimap-update))))
+         (set sym value)
+         (when (and (boundp 'minimap-timer-object)
+                    minimap-timer-object)
+           (cancel-timer minimap-timer-object)
+           (setq minimap-timer-object
+                 (run-with-idle-timer
+                  minimap-update-delay t 'minimap-update))))
   :group 'minimap)
 
 (defcustom minimap-always-recenter nil
@@ -167,8 +167,8 @@ the minimap.
 the active region, the minimap will scroll when you reach the
 bottom or top."
   :type '(choice (const :tag "Relative" relative)
-		 (const :tag "Middle" middle)
-		 (const :tag "Free" free))
+                 (const :tag "Middle" middle)
+                 (const :tag "Free" free))
   :group 'minimap)
 
 (defcustom minimap-hide-scroll-bar t
@@ -214,8 +214,8 @@ enabled.  This variable can have the following values:
 'always -- Always active.
 nil -- Inactive."
   :type '(choice (const :tag "Fallback if CEDET unavailable." 'as-fallback)
-		 (const :tag "Always active." 'always)
-		 (const :tag "Inactive." nil))
+                 (const :tag "Always active." 'always)
+                 (const :tag "Inactive." nil))
   :group 'minimap)
 
 (defcustom minimap-normal-height-faces '(font-lock-function-name-face)
@@ -271,30 +271,30 @@ minimap buffer."
   (interactive)
   ;; If minimap is visible, do nothing.
   (unless (and minimap-bufname
-	       (get-buffer minimap-bufname)
-	       (get-buffer-window (get-buffer minimap-bufname)))
+               (get-buffer minimap-bufname)
+               (get-buffer-window (get-buffer minimap-bufname)))
     (let ((bufname (concat minimap-buffer-name-prefix
-			   (buffer-name (current-buffer))))
-	  (new-win (if (eq minimap-window-location 'left)
-		       (split-window-horizontally
-			(round (* (window-width)
-				  minimap-width-fraction)))
-		     (split-window-horizontally
-		      (round (* (window-width)
-				(- 1 minimap-width-fraction))))
-		     (other-window 1))))
+                           (buffer-name (current-buffer))))
+          (new-win (if (eq minimap-window-location 'left)
+                       (split-window-horizontally
+                        (round (* (window-width)
+                                  minimap-width-fraction)))
+                     (split-window-horizontally
+                      (round (* (window-width)
+                                (- 1 minimap-width-fraction))))
+                     (other-window 1))))
       ;; If minimap exists but isn't visible, reuse it.
       (if (and minimap-bufname
-	       (get-buffer minimap-bufname))
-	  (switch-to-buffer minimap-bufname t)
-	;; Otherwise create new minimap
-	(minimap-new-minimap bufname)
-	;; If this is the first minimap, create the idle timer.
-	(when (zerop minimap-active-minimaps)
-	  (setq minimap-timer-object
-		(run-with-idle-timer minimap-update-delay t 'minimap-update)))
-	(setq minimap-active-minimaps
-	      (1+ minimap-active-minimaps))))
+               (get-buffer minimap-bufname))
+          (switch-to-buffer minimap-bufname t)
+        ;; Otherwise create new minimap
+        (minimap-new-minimap bufname)
+        ;; If this is the first minimap, create the idle timer.
+        (when (zerop minimap-active-minimaps)
+          (setq minimap-timer-object
+                (run-with-idle-timer minimap-update-delay t 'minimap-update)))
+        (setq minimap-active-minimaps
+              (1+ minimap-active-minimaps))))
     (run-hooks 'minimap-mode-hook)
     (other-window 1)
     (minimap-sync-overlays)))
@@ -302,7 +302,7 @@ minimap buffer."
 (defun minimap-new-minimap (bufname)
   "Create new minimap BUFNAME for current buffer and window."
   (let ((indbuf (make-indirect-buffer (current-buffer) bufname t))
-	(edges (window-pixel-edges)))
+        (edges (window-pixel-edges)))
     (setq minimap-bufname bufname)
     (set-buffer indbuf)
     (when minimap-hide-scroll-bar
@@ -313,15 +313,15 @@ minimap buffer."
     (overlay-put minimap-base-overlay 'priority 1)
     (setq minimap-pointmin-overlay (make-overlay (point-min) (1+ (point-min))))
     (setq minimap-start (window-start)
-	  minimap-end (window-end)
-	  minimap-active-overlay (make-overlay minimap-start minimap-end)
-	  line-spacing 0)
+          minimap-end (window-end)
+          minimap-active-overlay (make-overlay minimap-start minimap-end)
+          line-spacing 0)
     (overlay-put minimap-active-overlay 'face
-		 'minimap-active-region-background)
+                 'minimap-active-region-background)
     (overlay-put minimap-active-overlay 'priority 5)
     (minimap-mode 1)
     (when (and (boundp 'linum-mode)
-	       linum-mode)
+               linum-mode)
       (linum-mode 0))
     (when minimap-hide-fringes
       (set-window-fringes nil 0 0))
@@ -330,10 +330,10 @@ minimap buffer."
     (setq buffer-read-only t)
     ;; Calculate the actual number of lines displayable with the minimap face.
     (setq minimap-numlines
-	  (floor
-	   (/
-	    (- (nth 3 edges) (nth 1 edges))
-	    (car (progn (redisplay) (window-line-height))))))))
+          (floor
+           (/
+            (- (nth 3 edges) (nth 1 edges))
+            (car (progn (redisplay) (window-line-height))))))))
 
 ;;;###autoload
 (defun minimap-kill ()
@@ -343,20 +343,20 @@ Cancel the idle timer if no more minimaps are active."
   (if (null minimap-bufname)
       (message "No minimap associated with %s." (buffer-name (current-buffer)))
     (let ((curname (buffer-name (current-buffer)))
-	  (buf (get-buffer minimap-bufname))
-	  (win (get-buffer-window minimap-bufname)))
+          (buf (get-buffer minimap-bufname))
+          (win (get-buffer-window minimap-bufname)))
       (setq minimap-bufname nil)
       (if (null buf)
-	  (message "No minimap associated with %s." curname)
-	(when win
-	  (delete-window win))
-	(kill-buffer buf)
-	(when (zerop
-	       (setq minimap-active-minimaps
-		     (1- minimap-active-minimaps)))
-	  (cancel-timer minimap-timer-object)
-	  (setq minimap-timer-object nil))
-	(message "Minimap for %s killed." curname)))))
+          (message "No minimap associated with %s." curname)
+        (when win
+          (delete-window win))
+        (kill-buffer buf)
+        (when (zerop
+               (setq minimap-active-minimaps
+                     (1- minimap-active-minimaps)))
+          (cancel-timer minimap-timer-object)
+          (setq minimap-timer-object nil))
+        (message "Minimap for %s killed." curname)))))
 
 ;;; Minimap update
 
@@ -366,26 +366,27 @@ This is meant to be called from the idle-timer or the post command hook.
 When FORCE, enforce update of the active region."
   (when minimap-bufname
     (let ((win (get-buffer-window minimap-bufname))
-	  start end pt ov)
+          start end pt ov)
       (when win
-	(setq start (window-start)
-	      end (window-end)
-	      pt (point)
-	      ov)
-	(with-selected-window win
-	  (unless (and (not force)
-		       (= minimap-start start)
-		       (= minimap-end end))
-	    (move-overlay minimap-active-overlay start end)
-	    (setq minimap-start start
-		  minimap-end end)
-	    (minimap-recenter (line-number-at-pos (/ (+ end start) 2))
-			      (/ (- (line-number-at-pos end)
-				    (line-number-at-pos start))
-				 2)))
-	  (goto-char pt)
-	  (when minimap-always-recenter
-	    (recenter (round (/ (window-height) 2)))))))))
+        (setq start (window-start)
+              end (window-end)
+              pt (point)
+              ov)
+        (with-selected-window win
+          (unless (and (not force)
+                       (= minimap-start start)
+                       (= minimap-end end))
+            (move-overlay minimap-active-overlay start end)
+            (setq minimap-start start
+                  minimap-end end)
+            (minimap-recenter (line-number-at-pos (/ (+ end start) 2))
+                              (/ (- (line-number-at-pos end)
+                                    (line-number-at-pos start))
+                                 2)))
+          (goto-char pt)
+          (org-beginning-of-line)
+          (when minimap-always-recenter
+            (recenter (round (/ (window-height) 2)))))))))
 
 ;;; Overlay movement
 
@@ -395,39 +396,40 @@ When FORCE, enforce update of the active region."
   (mouse-set-point start-event)
   (when (get-buffer-window (buffer-base-buffer (current-buffer)))
     (let* ((echo-keystrokes 0)
-	   (end-posn (event-end start-event))
-	   (start-point (posn-point end-posn))
-	   (make-cursor-line-fully-visible nil)
-	   (cursor-type nil)
-	   (pcselmode (when (boundp 'pc-selection-mode)
-			pc-selection-mode))
+           (end-posn (event-end start-event))
+           (start-point (posn-point end-posn))
+           (make-cursor-line-fully-visible nil)
+           (cursor-type nil)
+           (pcselmode (when (boundp 'pc-selection-mode)
+                        pc-selection-mode))
            pt ev)
       (when (and pcselmode (fboundp 'pc-selection-mode))
-	(pc-selection-mode -1))
+        (pc-selection-mode -1))
       (move-overlay minimap-active-overlay start-point minimap-end)
       (track-mouse
-	(minimap-set-overlay start-point)
-	(while (and
-		(consp (setq ev (read-event)))
-		(eq (car ev) 'mouse-movement))
-	  (setq pt (posn-point (event-start ev)))
-	  (when (numberp pt)
-	    (minimap-set-overlay pt))))
+        (minimap-set-overlay start-point)
+        (while (and
+                (consp (setq ev (read-event)))
+                (eq (car ev) 'mouse-movement))
+          (setq pt (posn-point (event-start ev)))
+          (when (numberp pt)
+            (minimap-set-overlay pt))))
       (select-window (get-buffer-window (buffer-base-buffer)))
       (minimap-update)
       (when (and pcselmode (fboundp 'pc-selection-mode))
-	(pc-selection-mode 1)))))
+        (pc-selection-mode 1)))))
 
 (defun minimap-set-overlay (pt)
   "Set overlay position, with PT being the middle."
   (goto-char pt)
+  (org-beginning-of-line)
   (let* ((ovstartline (line-number-at-pos minimap-start))
-	 (ovendline (line-number-at-pos minimap-end))
-	 (ovheight (round (/ (- ovendline ovstartline) 2)))
-	 (line (line-number-at-pos))
-	 (winstart (window-start))
-	 (winend (window-end))
-	 newstart newend)
+         (ovendline (line-number-at-pos minimap-end))
+         (ovheight (round (/ (- ovendline ovstartline) 2)))
+         (line (line-number-at-pos))
+         (winstart (window-start))
+         (winend (window-end))
+         newstart newend)
     (setq pt (point-at-bol))
     (setq newstart (minimap-line-to-pos (- line ovheight)))
     ;; Perform recentering
@@ -435,14 +437,15 @@ When FORCE, enforce update of the active region."
     ;; Set new position in main buffer and redisplay
     (with-selected-window (get-buffer-window (buffer-base-buffer))
       (goto-char pt)
+      (org-beginning-of-line)
       (set-window-start nil newstart)
       (redisplay t)
       (setq newend (window-end)))
     (when (eq minimap-recenter-type 'free)
       (while (> newend winend)
-	(scroll-up 5)
-	(redisplay t)
-	(setq winend (window-end))))
+        (scroll-up 5)
+        (redisplay t)
+        (setq winend (window-end))))
     (move-overlay minimap-active-overlay newstart newend)))
 
 (defun minimap-line-to-pos (line)
@@ -450,7 +453,7 @@ When FORCE, enforce update of the active region."
   (save-excursion
     (goto-char 1)
     (if (eq selective-display t)
-	(re-search-forward "[\n\C-m]" nil 'end (1- line))
+        (re-search-forward "[\n\C-m]" nil 'end (1- line))
       (forward-line (1- line)))
     (point)))
 
@@ -463,56 +466,56 @@ active region."
    ;; Relative recentering
    ((eq minimap-recenter-type 'relative)
     (let* ((maxlines (line-number-at-pos (point-max)))
-	   percentage relpos newline start numlines)
+           percentage relpos newline start numlines)
       (setq numlines (count-lines (window-start) (window-end)))
       (setq percentage (/ (float middle) (float maxlines)))
       (setq newline (ceiling (* percentage numlines)))
       (setq start (minimap-line-to-pos
-		   (- middle height
-		      (floor (* percentage
-				(- numlines height height))))))
+                   (- middle height
+                      (floor (* percentage
+                                (- numlines height height))))))
       (or (> start (point-min))
-	  (setq start (point-min)))
+          (setq start (point-min)))
       ;; If (point-max) already visible, don't go further
       (if (and (> start (window-start))
-	       (with-selected-window (get-buffer-window (buffer-base-buffer))
-		 (= (point-max) (window-end))))
-	  (save-excursion
-	    (goto-char (point-max))
-	    (recenter -1))
-	(unless (and (> start (window-start))
-		     (= (point-max) (window-end)))
-	  (set-window-start nil start)))))
+               (with-selected-window (get-buffer-window (buffer-base-buffer))
+                 (= (point-max) (window-end))))
+          (save-excursion
+            (goto-char (point-max))
+            (recenter -1))
+        (unless (and (> start (window-start))
+                     (= (point-max) (window-end)))
+          (set-window-start nil start)))))
    ;; Middle recentering
-    ((eq minimap-recenter-type 'middle)
-     (let ((start (- middle height
-		     (floor (* 0.5
-			       (- minimap-numlines height height))))))
-       (if (< start 1)
-	   (progn
-	     ;; Hack: Emacs cannot scroll down any further, so we fake
-	     ;; it using an overlay.  Otherwise, the active region
-	     ;; would move to the top.
-	     (overlay-put minimap-pointmin-overlay
-			  'display (concat
-				    (make-string (abs start) 10)
-				    (buffer-substring (point-min) (1+ (point-min)))))
-	     (overlay-put minimap-pointmin-overlay
-			  'face `(:background ,(face-background 'default)))
-	     (overlay-put minimap-pointmin-overlay
-			  'priority 10)
-	     (setq start 1))
-	 (overlay-put minimap-pointmin-overlay 'display "")
-	 (overlay-put minimap-pointmin-overlay 'face nil))
-       (set-window-start nil (minimap-line-to-pos start))))
-    ;; Free recentering
-    ((eq minimap-recenter-type 'free)
-     (let ((newstart (minimap-line-to-pos (- middle height)))
-	   (winstart (window-start)))
-       (while (< newstart winstart)
-	 (scroll-down 5)
-	 (redisplay t)
-	 (setq winstart (window-start)))))))
+   ((eq minimap-recenter-type 'middle)
+    (let ((start (- middle height
+                    (floor (* 0.5
+                              (- minimap-numlines height height))))))
+      (if (< start 1)
+          (progn
+            ;; Hack: Emacs cannot scroll down any further, so we fake
+            ;; it using an overlay.  Otherwise, the active region
+            ;; would move to the top.
+            (overlay-put minimap-pointmin-overlay
+                         'display (concat
+                                   (make-string (abs start) 10)
+                                   (buffer-substring (point-min) (1+ (point-min)))))
+            (overlay-put minimap-pointmin-overlay
+                         'face `(:background ,(face-background 'default)))
+            (overlay-put minimap-pointmin-overlay
+                         'priority 10)
+            (setq start 1))
+        (overlay-put minimap-pointmin-overlay 'display "")
+        (overlay-put minimap-pointmin-overlay 'face nil))
+      (set-window-start nil (minimap-line-to-pos start))))
+   ;; Free recentering
+   ((eq minimap-recenter-type 'free)
+    (let ((newstart (minimap-line-to-pos (- middle height)))
+          (winstart (window-start)))
+      (while (< newstart winstart)
+        (scroll-down 5)
+        (redisplay t)
+        (setq winstart (window-start)))))))
 
 ;;; Minimap minor mode
 
@@ -535,36 +538,36 @@ Apply semantic overlays or face enlargement if necessary."
   (interactive)
   (when minimap-bufname
     (let ((baseov (overlays-in (point-min) (point-max)))
-	  (semantic (and (boundp 'semantic-version)
-			 (semantic-active-p)))
-	  ov props p)
+          (semantic (and (boundp 'semantic-version)
+                         (semantic-active-p)))
+          ov props p)
       (with-current-buffer minimap-bufname
-	(remove-overlays)
-	(while baseov
-	  (when (setq props (minimap-get-sync-properties (car baseov)))
-	    (setq ov (make-overlay (overlay-start (car baseov))
-				   (overlay-end (car baseov))))
-	    (while (setq p (car props))
-	      (overlay-put ov (car p) (cadr p))
-	      (setq props (cdr props))))
-	  (setq baseov (cdr baseov)))
-	(move-overlay minimap-pointmin-overlay (point-min) (1+ (point-min)))
-	;; Re-apply font overlay
-	(move-overlay minimap-base-overlay (point-min) (point-max)))
+        (remove-overlays)
+        (while baseov
+          (when (setq props (minimap-get-sync-properties (car baseov)))
+            (setq ov (make-overlay (overlay-start (car baseov))
+                                   (overlay-end (car baseov))))
+            (while (setq p (car props))
+              (overlay-put ov (car p) (cadr p))
+              (setq props (cdr props))))
+          (setq baseov (cdr baseov)))
+        (move-overlay minimap-pointmin-overlay (point-min) (1+ (point-min)))
+        ;; Re-apply font overlay
+        (move-overlay minimap-base-overlay (point-min) (point-max)))
       ;; Face enlargement
       (when (and font-lock-mode
-		 (or (eq minimap-enlarge-certain-faces 'always)
-		     (and (eq minimap-enlarge-certain-faces 'as-fallback)
-			  (or (not minimap-display-semantic-overlays)
-			      (not semantic)))))
-	(when (eq font-lock-support-mode 'jit-lock-mode)
-	  (jit-lock-fontify-now))
-	(with-current-buffer minimap-bufname
-	  (minimap-enlarge-faces)))
+                 (or (eq minimap-enlarge-certain-faces 'always)
+                     (and (eq minimap-enlarge-certain-faces 'as-fallback)
+                          (or (not minimap-display-semantic-overlays)
+                              (not semantic)))))
+        (when (eq font-lock-support-mode 'jit-lock-mode)
+          (jit-lock-fontify-now))
+        (with-current-buffer minimap-bufname
+          (minimap-enlarge-faces)))
       ;; Semantic overlays
       (when (and semantic
-		 minimap-display-semantic-overlays)
-	  (minimap-apply-semantic-overlays)))
+                 minimap-display-semantic-overlays)
+        (minimap-apply-semantic-overlays)))
     (minimap-update t)))
 
 (defun minimap-get-sync-properties (ov)
@@ -572,63 +575,63 @@ Apply semantic overlays or face enlargement if necessary."
 You can specify those properties with
 `minimap-sync-overlay-properties'."
   (delq nil
-	(mapcar
-	 (lambda (p)
-	   (let ((val (overlay-get ov p)))
-	     (if val
-		 (list p val)
-	       nil)))
-	 minimap-sync-overlay-properties)))
+        (mapcar
+         (lambda (p)
+           (let ((val (overlay-get ov p)))
+             (if val
+                 (list p val)
+               nil)))
+         minimap-sync-overlay-properties)))
 
 (defun minimap-enlarge-faces ()
   "Apply default font to all faces in `minimap-normal-height-faces'.
 This has to be called in the minimap buffer."
   (let ((pos (next-single-property-change (point-min) 'face))
-	next ov face)
+        next ov face)
     (while pos
       (setq face (get-text-property pos 'face))
       (when (delq nil (mapcar (lambda (x) (equal x face))
-			      minimap-normal-height-faces))
-	(setq ov
-	      (make-overlay pos
-			    (setq pos (next-single-property-change pos 'face))))
-	(overlay-put ov 'face `(:family ,(face-font 'default)))
-	(overlay-put ov 'priority 5))
+                              minimap-normal-height-faces))
+        (setq ov
+              (make-overlay pos
+                            (setq pos (next-single-property-change pos 'face))))
+        (overlay-put ov 'face `(:family ,(face-font 'default)))
+        (overlay-put ov 'priority 5))
       (setq pos (next-single-property-change pos 'face)))))
 
 (defun minimap-apply-semantic-overlays ()
   "Apply semantic overlays to the minimap.
 This has to be called from the base buffer."
-    (let ((tags (semantic-fetch-tags))
-	  tag class ov ovnew)
-      (while tags
-	(setq tag (car tags))
-	(setq class (semantic-tag-class tag))
-	(setq ov (semantic-tag-overlay tag))
-	(when (and (overlayp ov)
-		   (or (eq class 'function)
-		       (eq class 'type)
-		       (eq class 'variable)))
-	  (with-current-buffer minimap-bufname
-	    (let ((start (overlay-start ov))
-		  (end (overlay-end ov))
-		  (name (semantic-tag-name tag)))
-	      (overlay-put
-	       (setq ovnew (make-overlay start end))
-	       'face `(:background ,(face-background
-				     (intern (format "minimap-semantic-%s-face"
-						     (symbol-name class))))))
-	      (overlay-put ovnew 'priority 1)
-	      (setq start
-		    (minimap-line-to-pos (/ (+ (line-number-at-pos start)
-					       (line-number-at-pos end)) 2)))
-	      (setq end (progn (goto-char start) (point-at-eol)))
-	      (setq ovnew (make-overlay start end))
-	      (overlay-put ovnew 'face (format "minimap-semantic-%s-face"
-					       (symbol-name class)))
-	      (overlay-put ovnew 'display (concat "  " name "  "))
-	      (overlay-put ovnew 'priority 6))))
-	(setq tags (cdr tags)))))
+  (let ((tags (semantic-fetch-tags))
+        tag class ov ovnew)
+    (while tags
+      (setq tag (car tags))
+      (setq class (semantic-tag-class tag))
+      (setq ov (semantic-tag-overlay tag))
+      (when (and (overlayp ov)
+                 (or (eq class 'function)
+                     (eq class 'type)
+                     (eq class 'variable)))
+        (with-current-buffer minimap-bufname
+          (let ((start (overlay-start ov))
+                (end (overlay-end ov))
+                (name (semantic-tag-name tag)))
+            (overlay-put
+             (setq ovnew (make-overlay start end))
+             'face `(:background ,(face-background
+                                   (intern (format "minimap-semantic-%s-face"
+                                                   (symbol-name class))))))
+            (overlay-put ovnew 'priority 1)
+            (setq start
+                  (minimap-line-to-pos (/ (+ (line-number-at-pos start)
+                                             (line-number-at-pos end)) 2)))
+            (setq end (progn (goto-char start) (point-at-eol)))
+            (setq ovnew (make-overlay start end))
+            (overlay-put ovnew 'face (format "minimap-semantic-%s-face"
+                                             (symbol-name class)))
+            (overlay-put ovnew 'display (concat "  " name "  "))
+            (overlay-put ovnew 'priority 6))))
+      (setq tags (cdr tags)))))
 
 ;; outline-(minor-)mode
 (add-hook 'outline-view-change-hook 'minimap-sync-overlays)
